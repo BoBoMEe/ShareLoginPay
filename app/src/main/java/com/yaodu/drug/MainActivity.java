@@ -1,8 +1,10 @@
 package com.yaodu.drug;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -78,11 +80,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.alipay:
+                check(0);
                 String orderInfo = AlipayUtil.getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
                 AlipayUtil.aliPay(this, orderInfo, this);
                 break;
             case R.id.wxpay:
+                check(1);
                 WxpayUtil.weixinPay(new PayReq(), api);
+                break;
+        }
+    }
+
+    private void check(int i) {
+        switch (i) {
+            case 0:
+                if (TextUtils.isEmpty(Constants.PARTNER) || TextUtils.isEmpty(Constants.RSA_PRIVATE)
+                        || TextUtils.isEmpty(Constants.SELLER)) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("警告")
+                            .setMessage("需要配置PARTNER | RSA_PRIVATE| SELLER")
+                            .setPositiveButton("确定",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialoginterface, int i) {
+                                            //
+                                            finish();
+                                        }
+                                    }).show();
+                    return;
+                }
+
+                break;
+            case 1:
+                if ("wxb4ba3c02aa476ea1".equals(Constants.APP_ID)) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("警告")
+                            .setMessage("需要配置APP_ID")
+                            .setPositiveButton("确定",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialoginterface, int i) {
+                                            //
+                                            finish();
+                                        }
+                                    }).show();
+                    return;
+                }
                 break;
         }
     }
