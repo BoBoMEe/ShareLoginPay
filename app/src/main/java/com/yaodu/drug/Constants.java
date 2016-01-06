@@ -9,7 +9,7 @@ import com.tencent.mm.sdk.modelbase.BaseResp;
 public class Constants {
     //weixin
     //appid
-    public static String APP_ID = "wxb4ba3c02aa476ea1";
+    public static String APP_ID = "";
 
 
     public static BaseResp baseResp;
