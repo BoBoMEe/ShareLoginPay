@@ -11,11 +11,9 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.modelpay.PayResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -26,8 +24,6 @@ import com.yaodu.drug.utils.WxpayUtil;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AlipayResultListener {
 
-    Button alipay;
-    Button wxpay;
     private IWXAPI api;
     private BaseResp resp;
 
@@ -81,12 +77,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.alipay:
                 check(0);
-                String orderInfo = AlipayUtil.getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
-                AlipayUtil.aliPay(this, orderInfo, this);
+                AlipayUtil.aliPay(this, this);
                 break;
             case R.id.wxpay:
                 check(1);
-                WxpayUtil.weixinPay(new PayReq(), api);
+                WxpayUtil.weixinPay(api);
                 break;
         }
     }

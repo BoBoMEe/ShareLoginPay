@@ -113,8 +113,9 @@ public class AlipayUtil {
         return "sign_type=\"RSA\"";
     }
 
-    public static void aliPay(final Activity activity, String orderInfo, final AlipayResultListener listener) {
+    public static void aliPay(final Activity activity, final AlipayResultListener listener) {
 
+        String orderInfo = getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
 
         String sign = sign(orderInfo);
         try {
