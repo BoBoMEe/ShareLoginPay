@@ -1,9 +1,14 @@
 package com.yaodu.drug;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,9 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.tencent.mm.sdk.constants.ConstantsAPI;
-import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelpay.PayResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.yaodu.drug.model.AliPayResult;
@@ -25,7 +27,8 @@ import com.yaodu.drug.utils.WxpayUtil;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AlipayResultListener {
 
     private IWXAPI api;
-    private BaseResp resp;
+    LocalBroadcastManager mLocalBroadcastManager;
+    BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
         api.registerApp(Constants.APP_ID);
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
+        mReceiver = new PayReceiver();
+        IntentFilter intentFilter = new IntentFilter(Constants.payAction);
+        mLocalBroadcastManager.registerReceiver(mReceiver, intentFilter);
 
         findViewById(R.id.alipay).setOnClickListener(this);
         findViewById(R.id.wxpay).setOnClickListener(this);
@@ -77,11 +84,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.alipay:
                 check(0);
-                AlipayUtil.aliPay(this, this);
                 break;
             case R.id.wxpay:
                 check(1);
-                WxpayUtil.weixinPay(api);
                 break;
         }
     }
@@ -103,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                     }).show();
                     return;
+                } else {
+                    AlipayUtil.aliPay(this, this);
                 }
 
                 break;
@@ -120,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                     }).show();
                     return;
+                } else {
+                    WxpayUtil.weixinPay(api);
                 }
                 break;
         }
@@ -152,23 +161,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     // 微信支付数据返回处理
-    @Override
-    protected void onResume() {
-        super.onResume();
-        resp = Constants.baseResp;
-        if (null != resp && resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            // code返回
-            if (resp.errCode == 0) {
-                // 支付成功
-                if (resp instanceof com.tencent.mm.sdk.modelpay.PayResp) {
-                    com.tencent.mm.sdk.modelpay.PayResp payResp = (PayResp) resp;
-                    String prepayId = payResp.prepayId;
+    class PayReceiver extends BroadcastReceiver {
 
-                }
-            }
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String prepayId = intent.getStringExtra(Constants.prepayId);
+
         }
-        Constants.baseResp = null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocalBroadcastManager.unregisterReceiver(mReceiver);
     }
 }
