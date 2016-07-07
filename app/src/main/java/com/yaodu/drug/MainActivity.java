@@ -16,7 +16,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.Toast;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.yaodu.drug.model.AliPayResult;
@@ -128,7 +128,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     }).show();
                     return;
                 } else {
+                    //判断用户是否安装微信
+                    if (WxpayUtil.isWXAppInstalledAndSupported(api))
                     WxpayUtil.weixinPay(api);
+                    else {
+                        Toast.makeText(MainActivity.this, "没有安装微信", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
         }

@@ -2,9 +2,7 @@ package com.yaodu.drug.utils;
 
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-
 import java.io.IOException;
-
 import retrofit2.Call;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
@@ -51,5 +49,10 @@ public class WxpayUtil {
                 msgApi.sendReq(req);
             }
         });
+    }
+
+    public static boolean isWXAppInstalledAndSupported(IWXAPI msgApi) {
+
+        return msgApi.isWXAppInstalled() && msgApi.isWXAppSupportAPI();
     }
 }
