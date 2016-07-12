@@ -19,6 +19,7 @@
         android:text="支付宝支付" />
 
     <Button
+        android:layout_marginLeft="30dp"
         android:id="@+id/wxpay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

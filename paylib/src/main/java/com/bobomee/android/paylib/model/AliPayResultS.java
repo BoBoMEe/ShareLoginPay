@@ -1,4 +1,4 @@
-package com.yaodu.drug.model;
+package com.bobomee.android.paylib.model;
 
 import android.text.TextUtils;
 

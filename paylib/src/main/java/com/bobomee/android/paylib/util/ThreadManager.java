@@ -3,7 +3,7 @@
  * History:
  * Created by mwqi on 2014-4-4
  */
-package com.yaodu.drug.utils;
+package com.bobomee.android.paylib.util;
 
 import java.util.HashMap;
 import java.util.Map;
