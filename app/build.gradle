@@ -16,20 +16,16 @@ android {
         debug {
         }
         relealse {
-//            storeFile file('app.keystore')
-//            storePassword '***'
-//            keyAlias 'app'
-//            keyPassword '***'
         }
     }
     // 打包
     buildTypes {
         debug {
-            buildConfigField "int", "ENV", "2"
             minifyEnabled false
             zipAlignEnabled false
             shrinkResources false
             proguardFile 'proguard-rules.pro'
+//            signingConfig signingConfigs.relealse
         }
     }
 
@@ -41,9 +37,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile project(':paylib')
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile project(':sharelogin')
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,21 +7,65 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.yaodu.drug.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <Button
-        android:id="@+id/alipay"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="支付宝支付" />
+        android:orientation="vertical"
 
-    <Button
-        android:layout_marginLeft="30dp"
-        android:id="@+id/wxpay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="微信支付" />
-</LinearLayout>
+        >
+        <Button
+            android:id="@+id/alipay"
+            android:onClick="alipay"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="支付宝支付"
+            android:textSize="20sp"
+            />
+
+        <Button
+            android:id="@+id/wxpay"
+            android:onClick="wxpay"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:text="微信支付"
+            android:textSize="20sp"
+            />
+
+        <Button
+            android:id="@+id/wxlogin"
+            android:onClick="wxlogin"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:text="微信登录"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/qqlogin"
+            android:onClick="qqlogin"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:text="QQ登录"
+            android:textSize="20sp"
+            />
+        <Button
+            android:id="@+id/wblogin"
+            android:onClick="wblogin"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:text="微博登录"
+            android:textSize="20sp"
+            />
+
+
+    </LinearLayout>
+</ScrollView>

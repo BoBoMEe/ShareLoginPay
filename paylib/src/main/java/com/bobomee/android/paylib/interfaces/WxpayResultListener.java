@@ -15,4 +15,6 @@ public interface WxpayResultListener {
   void onError(int errCode);
 
   void onCancel();
+
+  void notSupport();
 }

@@ -3,7 +3,6 @@ package com.bobomee.android.paylib.wxapi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import com.bobomee.android.paylib.PayBlock;
 import com.bobomee.android.paylib.interfaces.WxpayResultListener;
 import com.bobomee.android.paylib.util.WxpayUtil;
 import com.tencent.mm.sdk.modelbase.BaseReq;
@@ -11,7 +10,6 @@ import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelpay.PayResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 /**
  * 微信支付回调
@@ -25,7 +23,7 @@ public class WXPayHandlerActivity extends AppCompatActivity implements IWXAPIEve
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    api = WXAPIFactory.createWXAPI(this, PayBlock.getInstance().getWechatAppId());
+    api = WxpayUtil.getmIWXAPI();
     api.handleIntent(getIntent(), this);
   }
 

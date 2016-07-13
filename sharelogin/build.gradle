@@ -23,5 +23,6 @@ dependencies {
   testCompile 'junit:junit:4.12'
   compile 'com.android.support:appcompat-v7:22.2.1'
   compile files('../jars/libammsdk.jar')
-  compile files('../jars/alipaySdk-20151215.jar')
+  compile files('../jars/open_sdk_r5276.jar')
+  compile files('../jars/weiboSDKCore_3.1.2.jar')
 }
