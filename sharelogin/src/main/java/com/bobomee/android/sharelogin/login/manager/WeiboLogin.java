@@ -55,13 +55,16 @@ public class WeiboLogin implements ILogin {
 
         if (null != iLoginCallback) iLoginCallback.tokeCallBack(mAccessToken);
 
-        //获取用户信息
-        UsersAPI mUserAPI =
-            new UsersAPI(activity, LoginBlock.getInstance().getWbAppKey(), mAccessToken);
+        String wbAppKey = LoginBlock.getInstance().getWbAppKey();
 
-        long uid = Long.parseLong(mAccessToken.getUid());// 获取openid
+        if (!TextUtils.isEmpty(wbAppKey)) {
+          //获取用户信息
+          UsersAPI mUserAPI = new UsersAPI(activity, wbAppKey, mAccessToken);
 
-        mUserAPI.show(uid, mListener);
+          long uid = Long.parseLong(mAccessToken.getUid());// 获取openid
+
+          mUserAPI.show(uid, mListener);
+        }
       } else {
         // 以下几种情况，您会收到 Code：
         // 1. 当您未在平台上注册的应用程序的包名与签名时；
@@ -99,18 +102,24 @@ public class WeiboLogin implements ILogin {
 
   @Override public void doLogin(Activity activity, ILoginCallback callback) {
 
-    //instance
-    this.activity = activity;
-    this.iLoginCallback = callback;
-    AccessTokenKeeper.clear(activity);
+    String wbAppKey = LoginBlock.getInstance().getWbAppKey();
+    String wbRedirectUrl = LoginBlock.getInstance().getWbRedirectUrl();
+    String wbScope = LoginBlock.getInstance().getWbScope();
 
-    // 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
-    AuthInfo mAuthInfo = new AuthInfo(activity, LoginBlock.getInstance().getWbAppKey(),
-        LoginBlock.getInstance().getWbRedirectUrl(), LoginBlock.getInstance().getWbScope());
-    mSsoHandler = new SsoHandler(activity, mAuthInfo);
+    if (!TextUtils.isEmpty(wbAppKey) && !TextUtils.isEmpty(wbRedirectUrl) && !TextUtils.isEmpty(
+        wbScope)) {
+      //instance
+      this.activity = activity;
+      this.iLoginCallback = callback;
+      AccessTokenKeeper.clear(activity);
 
-    //login
-    mSsoHandler.authorize(new AuthListener());
+      // 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
+      AuthInfo mAuthInfo = new AuthInfo(activity, wbAppKey, wbRedirectUrl, wbScope);
+      mSsoHandler = new SsoHandler(activity, mAuthInfo);
+
+      //login
+      mSsoHandler.authorize(new AuthListener());
+    }
   }
 
   @Override public boolean onActivityResult(int requestCode, int resultCode, Intent data) {

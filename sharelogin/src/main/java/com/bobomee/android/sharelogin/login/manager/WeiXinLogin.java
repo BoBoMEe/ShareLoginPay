@@ -2,6 +2,7 @@ package com.bobomee.android.sharelogin.login.manager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 import com.bobomee.android.sharelogin.login.LoginBlock;
 import com.bobomee.android.sharelogin.login.interfaces.ILogin;
 import com.bobomee.android.sharelogin.login.interfaces.ILoginCallback;
@@ -23,12 +24,15 @@ public class WeiXinLogin implements ILogin {
   private static ILoginCallback iLoginCallback;
 
   @Override public void doLogin(Activity activity, ILoginCallback callback) {
-    iLoginCallback = callback;
 
-    api = WXAPIFactory.createWXAPI(activity, LoginBlock.getInstance().getWechatAppId(), true);
-    api.registerApp(LoginBlock.getInstance().getWechatAppId());
+    String wechatAppId = LoginBlock.getInstance().getWechatAppId();
+    if (!TextUtils.isEmpty(wechatAppId)) {
+      api = WXAPIFactory.createWXAPI(activity, wechatAppId, true);
+      api.registerApp(wechatAppId);
 
-    login();
+      iLoginCallback = callback;
+      login();
+    }
   }
 
   private void login() {

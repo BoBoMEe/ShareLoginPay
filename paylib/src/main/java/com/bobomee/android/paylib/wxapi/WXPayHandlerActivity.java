@@ -24,12 +24,14 @@ public class WXPayHandlerActivity extends AppCompatActivity implements IWXAPIEve
     super.onCreate(savedInstanceState);
 
     api = WxpayUtil.getmIWXAPI();
+    if (null != api)
     api.handleIntent(getIntent(), this);
   }
 
   @Override protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
     setIntent(intent);
+    if (null != api)
     api.handleIntent(intent, this);
   }
 

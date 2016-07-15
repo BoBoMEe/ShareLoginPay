@@ -37,7 +37,10 @@ public class QQLogin implements ILogin {
       String token = jsonObject.getString(Constants.PARAM_ACCESS_TOKEN);
       String expires = jsonObject.getString(Constants.PARAM_EXPIRES_IN);
       String openId = jsonObject.getString(Constants.PARAM_OPEN_ID);
-      if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(expires) && !TextUtils.isEmpty(openId)) {
+      if (!TextUtils.isEmpty(token)
+          && !TextUtils.isEmpty(expires)
+          && !TextUtils.isEmpty(openId)
+          && null != mTencent) {
         mTencent.setAccessToken(token, expires);
         mTencent.setOpenId(openId);
       }
@@ -88,25 +91,28 @@ public class QQLogin implements ILogin {
   }
 
   @Override public void doLogin(Activity activity, ILoginCallback callback) {
-
     //instance
-    this.activity = activity;
-    this.iLoginCallback = callback;
+    String qqAppId = LoginBlock.getInstance().getQQAppId();
 
-    mTencent = Tencent.createInstance(LoginBlock.getInstance().getQQAppId(), activity);
+    if (!TextUtils.isEmpty(qqAppId)) {
+      mTencent = Tencent.createInstance(qqAppId, activity);
+    }
 
-    //login
-    if (!mTencent.isSessionValid()) {
-      mTencent.login(activity, "all", baseUiListener = new BaseUiListener(activity, TOKEN));
-    } else {
-      mTencent.logout(activity);
+    if (null != mTencent) {
+      //login
+      if (!mTencent.isSessionValid()) {
+        mTencent.login(activity, "all", baseUiListener = new BaseUiListener(activity, TOKEN));
+      } else {
+        mTencent.logout(activity);
+      }
+
+      this.activity = activity;
+      this.iLoginCallback = callback;
     }
   }
 
   @Override public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == Constants.REQUEST_API
-        && resultCode == Constants.RESULT_LOGIN
-        && null != iLoginCallback) {
+    if (requestCode == Constants.REQUEST_API && resultCode == Constants.ACTIVITY_OK) {
       mTencent.handleLoginData(data, baseUiListener);
       return true;
     }

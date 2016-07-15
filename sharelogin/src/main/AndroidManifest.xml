@@ -31,13 +31,15 @@
         android:name="com.tencent.connect.common.AssistActivity"
         android:configChanges="orientation|keyboardHidden|screenSize"/>
 
+    <!-- 必须注册在微博授权，分享微博时候用到 -->
     <activity
         android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
         android:configChanges="keyboardHidden|orientation"
         android:exported="false"
         android:windowSoftInputMode="adjustResize">
     </activity>
-    <activity android:name=".login.wxapi.WXLoginHandlerActivity"
+    <activity
+        android:name=".wxapi.WXAuthHandlerActivity"
         android:exported="true"/>
 
   </application>
