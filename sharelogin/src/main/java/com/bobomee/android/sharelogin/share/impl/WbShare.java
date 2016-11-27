@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
-import com.bobomee.android.sharelogin.login.LoginBlock;
+import com.bobomee.android.sharelogin.login.LoginShareBlock;
 import com.bobomee.android.sharelogin.login.util.AccessTokenKeeper;
 import com.bobomee.android.sharelogin.share.content.ShareContent;
 import com.bobomee.android.sharelogin.share.interfaces.ContentType;
@@ -49,14 +49,14 @@ public class WbShare implements IShare {
   private IShareCallBack mIShareCallBack;
 
   public WbShare(Activity activity) {
-    mWbAppKey = LoginBlock.getInstance().getWbAppKey();
+    mWbAppKey = LoginShareBlock.getInstance().getWbAppKey();
 
     if (!TextUtils.isEmpty(mWbAppKey)) {
       this.mActivity = activity;
       mSinaAPI = WeiboShareSDK.createWeiboAPI(activity, mWbAppKey);
       mSinaAPI.registerApp();
-      mWbRedirectUrl = LoginBlock.getInstance().getWbRedirectUrl();
-      mWbScope = LoginBlock.getInstance().getWbScope();
+      mWbRedirectUrl = LoginShareBlock.getInstance().getWbRedirectUrl();
+      mWbScope = LoginShareBlock.getInstance().getWbScope();
     }
   }
 

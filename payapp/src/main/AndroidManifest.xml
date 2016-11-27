@@ -17,6 +17,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <!--todo mock appid-->
+                <data android:scheme="wxb4ba3c02aa476ea1"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".wxapi.WXPayEntryActivity"

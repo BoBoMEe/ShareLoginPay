@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import com.bobomee.android.sharelogin.login.LoginBlock;
+import com.bobomee.android.sharelogin.login.LoginShareBlock;
 import com.bobomee.android.sharelogin.login.interfaces.ILogin;
 import com.bobomee.android.sharelogin.login.interfaces.ILoginCallback;
 import com.bobomee.android.sharelogin.login.sinaapi.User;
@@ -32,6 +32,9 @@ public class WeiboLogin implements ILogin {
    * 注意：SsoHandler 仅当 SDK 支持 SSO 时有效
    */
   private SsoHandler mSsoHandler;
+  private String mWbAppKey;
+  private String mWbRedirectUrl;
+  private String mWbScope;
 
   /**
    * 微博认证授权回调类。 1. SSO 授权时，需要在 {@link #onActivityResult} 中调用
@@ -55,7 +58,7 @@ public class WeiboLogin implements ILogin {
 
         if (null != iLoginCallback) iLoginCallback.tokeCallBack(mAccessToken);
 
-        String wbAppKey = LoginBlock.getInstance().getWbAppKey();
+        String wbAppKey = LoginShareBlock.getInstance().getWbAppKey();
 
         if (!TextUtils.isEmpty(wbAppKey)) {
           //获取用户信息
@@ -100,21 +103,26 @@ public class WeiboLogin implements ILogin {
     }
   };
 
+  @Override public void prepare(Activity _activity) {
+    mWbAppKey = LoginShareBlock.getInstance().getWbAppKey();
+    mWbRedirectUrl = LoginShareBlock.getInstance().getWbRedirectUrl();
+    mWbScope = LoginShareBlock.getInstance().getWbScope();
+    //instance
+    this.activity = _activity;
+  }
+
   @Override public void doLogin(Activity activity, ILoginCallback callback) {
 
-    String wbAppKey = LoginBlock.getInstance().getWbAppKey();
-    String wbRedirectUrl = LoginBlock.getInstance().getWbRedirectUrl();
-    String wbScope = LoginBlock.getInstance().getWbScope();
+    this.iLoginCallback = callback;
 
-    if (!TextUtils.isEmpty(wbAppKey) && !TextUtils.isEmpty(wbRedirectUrl) && !TextUtils.isEmpty(
-        wbScope)) {
-      //instance
-      this.activity = activity;
-      this.iLoginCallback = callback;
+    if (!TextUtils.isEmpty(mWbAppKey) && !TextUtils.isEmpty(mWbRedirectUrl) && !TextUtils.isEmpty(
+        mWbScope)) {
+
+
       AccessTokenKeeper.clear(activity);
 
       // 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
-      AuthInfo mAuthInfo = new AuthInfo(activity, wbAppKey, wbRedirectUrl, wbScope);
+      AuthInfo mAuthInfo = new AuthInfo(activity, mWbAppKey, mWbRedirectUrl, mWbScope);
       mSsoHandler = new SsoHandler(activity, mAuthInfo);
 
       //login

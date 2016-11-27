@@ -10,6 +10,9 @@ import android.content.Intent;
  */
 public interface ILogin {
 
+
+  void prepare(Activity _activity);
+
   /**
    * 执行登录
    *

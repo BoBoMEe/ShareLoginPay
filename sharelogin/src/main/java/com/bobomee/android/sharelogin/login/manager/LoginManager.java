@@ -10,26 +10,29 @@ import com.bobomee.android.sharelogin.login.interfaces.ILoginCallback;
  * @author bobomee.
  * wbwjx115@gmail.com
  */
-public class LoginManager {
+public enum LoginManager {
 
-    private final Class<? extends ILogin> loginClass;
-    private final Activity activity;
-    private final ILoginCallback loginCallback;
+    INSTANCE;
+
+    private Class<? extends ILogin> loginClass;
+    private ILoginCallback loginCallback;
     private ILogin iLogin;
 
-    public LoginManager(Activity activity, Class<? extends ILogin> loginClass, ILoginCallback loginCallback) {
-        this.activity = activity;
-        this.loginClass = loginClass;
-        this.loginCallback = loginCallback;
+    public LoginManager loginClass(Class<? extends ILogin> _loginClass) {
+        loginClass = _loginClass;
+        return this;
     }
 
-    public void doLogin() {
+    public LoginManager loginCallback(ILoginCallback _iLoginCallback) {
+        loginCallback = _iLoginCallback;
+        return this;
+    }
 
+    public void doLogin(Activity activity) {
         try {
-
             iLogin = loginClass.newInstance();
+            iLogin.prepare(activity);
             iLogin.doLogin(activity, loginCallback);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

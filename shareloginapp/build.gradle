@@ -15,14 +15,21 @@ android {
   signingConfigs {
     debug {}
     relealse {
+      //todo Signature package must be used to login(share) for WeChat
+      //            storeFile rootProject.ext.storeFile
+      //            storePassword rootProject.ext.storePassword
+      //            keyAlias rootProject.ext.keyAlias
+      //            keyPassword rootProject.ext.keyPassword
+      }
     }
-  }
 
   buildTypes {
-    debug {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//      signingConfig signingConfigs.relealse
+    debug { minifyEnabled false
+      zipAlignEnabled false
+      shrinkResources false
+      proguardFile 'proguard-rules.pro'
+      //            signingConfig signingConfigs.relealse
+      signingConfig signingConfigs.debug
     }
   }
 }

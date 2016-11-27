@@ -6,7 +6,7 @@ package com.yaodu.drug.mock.alipay;
  * @author bobomee.
  *         wbwjx115@gmail.com
  */
-public class AlipayBlock {
+public final class AlipayBlock {
 
   private static AlipayBlock mInstance;
 
@@ -29,21 +29,21 @@ public class AlipayBlock {
   /**
    * init alipay params
    */
-  public void initAliPay(String alipayPartner, String alipaySeller, String alipayRsa_private) {
+  public final void initAliPay(String alipayPartner, String alipaySeller, String alipayRsa_private) {
     this.mAlipayPartner = alipayPartner;
     this.mAlipaySeller = alipaySeller;
     this.mAlipayRsa_private = alipayRsa_private;
   }
 
-  public String getAlipayPartner() {
+  public final String getAlipayPartner() {
     return mAlipayPartner;
   }
 
-  public String getAlipayRsa_private() {
+  public final String getAlipayRsa_private() {
     return mAlipayRsa_private;
   }
 
-  public String getAlipaySeller() {
+  public final String getAlipaySeller() {
     return mAlipaySeller;
   }
 }

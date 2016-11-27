@@ -1,4 +1,4 @@
-package com.yaodu.drug.mock.alipay;
+package com.bobomee.android.paylib.util;
 
 import java.security.KeyFactory;
 import java.security.PrivateKey;

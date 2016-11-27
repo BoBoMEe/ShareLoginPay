@@ -16,6 +16,11 @@ android {
         debug {
         }
         relealse {
+            //todo Signature package must be used to pay for WeChat
+//            storeFile rootProject.ext.storeFile
+//            storePassword rootProject.ext.storePassword
+//            keyAlias rootProject.ext.keyAlias
+//            keyPassword rootProject.ext.keyPassword
         }
     }
     // 打包
@@ -26,6 +31,7 @@ android {
             shrinkResources false
             proguardFile 'proguard-rules.pro'
 //            signingConfig signingConfigs.relealse
+            signingConfig signingConfigs.debug
         }
     }
 

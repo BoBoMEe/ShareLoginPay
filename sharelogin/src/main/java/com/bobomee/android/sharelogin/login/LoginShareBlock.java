@@ -6,17 +6,17 @@ package com.bobomee.android.sharelogin.login;
  * @author bobomee.
  *         wbwjx115@gmail.com
  */
-public class LoginBlock {
+public final class LoginShareBlock {
 
-  private LoginBlock() {
+  private LoginShareBlock() {
 
   }
 
-  private static LoginBlock instance;
+  private static LoginShareBlock instance;
 
-  public static LoginBlock getInstance() {
+  public static LoginShareBlock getInstance() {
     if (instance == null) {
-      instance = new LoginBlock();
+      instance = new LoginShareBlock();
     }
     return instance;
   }
@@ -36,41 +36,41 @@ public class LoginBlock {
       + "follow_app_official_microblog,"
       + "invitation_write";
 
-  public void initWechatLogin(String wechatAppId, String wechatAppSecret) {
+  public final void initWechat(String wechatAppId, String wechatAppSecret) {
     this.mWechatAppId = wechatAppId;
     this.mWechatAppSecret = wechatAppSecret;
   }
 
-  public void initQQLogin(String qqAppId) {
+  public final void initQQ(String qqAppId) {
     this.mQQAppId = qqAppId;
   }
 
-  public void initWbLogin(String wbAppKey, String wbRedirectUrl) {
+  public final void initWb(String wbAppKey, String wbRedirectUrl) {
     this.mWbAppKey = wbAppKey;
     this.mWbRedirectUrl = wbRedirectUrl;
   }
 
-  public String getQQAppId() {
+  public final String getQQAppId() {
     return mQQAppId;
   }
 
-  public String getWbAppKey() {
+  public final String getWbAppKey() {
     return mWbAppKey;
   }
 
-  public String getWbRedirectUrl() {
+  public final String getWbRedirectUrl() {
     return mWbRedirectUrl;
   }
 
-  public String getWbScope() {
+  public final String getWbScope() {
     return mWbScope;
   }
 
-  public String getWechatAppId() {
+  public final String getWechatAppId() {
     return mWechatAppId;
   }
 
-  public String getWechatAppSecret() {
+  public final String getWechatAppSecret() {
     return mWechatAppSecret;
   }
 }

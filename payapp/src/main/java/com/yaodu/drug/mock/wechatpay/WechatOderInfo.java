@@ -1,6 +1,8 @@
 package com.yaodu.drug.mock.wechatpay;
 
+import com.bobomee.android.paylib.util.HttpUtil;
 import com.tencent.mm.sdk.modelpay.PayReq;
+import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,8 +13,26 @@ import org.json.JSONObject;
  *
  * @author bobomee.
  *         wbwjx115@gmail.com
+ *
  */
 public class WechatOderInfo {
+
+  public static final String url = "http://wxpay.weixin.qq.com/pub_v2/app/app_pay.php?plat=android";
+
+  public static String getPayInfo() {
+
+    String result;
+    try {
+      result = HttpUtil.get(url);
+    } catch (IOException _e) {
+      _e.printStackTrace();
+      result = "";
+    }
+
+    return result;
+  }
+
+
 
   public static PayReq getWeixinPayReq(String payInfo) {
     try {

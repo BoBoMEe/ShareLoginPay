@@ -2,8 +2,6 @@ package com.bobomee.android.sharelogin.share.impl;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.text.TextUtils;
-import com.bobomee.android.sharelogin.login.LoginBlock;
 import com.bobomee.android.sharelogin.login.util.ThreadManager;
 import com.bobomee.android.sharelogin.share.content.ShareContent;
 import com.bobomee.android.sharelogin.share.interfaces.ContentType;
@@ -12,6 +10,7 @@ import com.bobomee.android.sharelogin.share.interfaces.IShareCallBack;
 import com.bobomee.android.sharelogin.share.interfaces.ShareType;
 import com.bobomee.android.sharelogin.share.util.BitmapUtil;
 import com.bobomee.android.sharelogin.share.util.ShareUtil;
+import com.bobomee.android.sharelogin.util.WxLSUtil;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXImageObject;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
@@ -19,7 +18,6 @@ import com.tencent.mm.sdk.modelmsg.WXMusicObject;
 import com.tencent.mm.sdk.modelmsg.WXTextObject;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 /**
  * 微信分享
@@ -31,7 +29,7 @@ public class WechatShare implements IShare {
 
   private static final int THUMB_SIZE = 116;
 
-  private IWXAPI mIWXAPI;
+  private static IWXAPI mIWXAPI;
 
   private static  IShareCallBack mIShareCallBack;
 
@@ -47,12 +45,9 @@ public class WechatShare implements IShare {
 
   public WechatShare(Activity activity) {
 
-    String weChatAppId = LoginBlock.getInstance().getWechatAppId();
+    WxLSUtil.init(activity);
+    mIWXAPI = WxLSUtil.getmIWXAPI();
 
-    if (!TextUtils.isEmpty(weChatAppId)) {
-      mIWXAPI = WXAPIFactory.createWXAPI(activity, weChatAppId, true);
-      mIWXAPI.registerApp(weChatAppId);
-    }
   }
 
   @Override public void share(ShareContent shareContent, IShareCallBack iShareCallBack) {
@@ -186,4 +181,5 @@ public class WechatShare implements IShare {
   public static IShareCallBack getmIShareCallBack() {
     return mIShareCallBack;
   }
+
 }

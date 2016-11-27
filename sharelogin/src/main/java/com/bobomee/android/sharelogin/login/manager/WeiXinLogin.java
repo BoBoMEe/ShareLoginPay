@@ -2,13 +2,11 @@ package com.bobomee.android.sharelogin.login.manager;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.text.TextUtils;
-import com.bobomee.android.sharelogin.login.LoginBlock;
 import com.bobomee.android.sharelogin.login.interfaces.ILogin;
 import com.bobomee.android.sharelogin.login.interfaces.ILoginCallback;
+import com.bobomee.android.sharelogin.util.WxLSUtil;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 /**
  * Created on 2016/3/25.下午10:00.
@@ -23,20 +21,20 @@ public class WeiXinLogin implements ILogin {
 
   private static ILoginCallback iLoginCallback;
 
+  @Override public void prepare(Activity _activity) {
+    WxLSUtil.init(_activity);
+    api = WxLSUtil.getmIWXAPI();
+  }
+
   @Override public void doLogin(Activity activity, ILoginCallback callback) {
 
-    String wechatAppId = LoginBlock.getInstance().getWechatAppId();
-    if (!TextUtils.isEmpty(wechatAppId)) {
-      api = WXAPIFactory.createWXAPI(activity, wechatAppId, true);
-      api.registerApp(wechatAppId);
+    iLoginCallback = callback;
 
-      iLoginCallback = callback;
-      login();
-    }
+    login();
   }
 
   private void login() {
-    if (isWXAppInstalledAndSupported(api)) {
+    if (WxLSUtil.isWXAppInstalledAndSupported(api)) {
       SendAuth.Req req = new SendAuth.Req();
       req.scope = "snsapi_userinfo";
       req.state = "wechat_sdk_demo";
@@ -61,8 +59,4 @@ public class WeiXinLogin implements ILogin {
     return iLoginCallback;
   }
 
-  public static boolean isWXAppInstalledAndSupported(IWXAPI msgApi) {
-
-    return msgApi.isWXAppInstalled() && msgApi.isWXAppSupportAPI();
-  }
 }

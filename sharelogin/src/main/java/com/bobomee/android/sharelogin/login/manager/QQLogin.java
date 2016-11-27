@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import com.bobomee.android.sharelogin.login.LoginBlock;
+import com.bobomee.android.sharelogin.login.LoginShareBlock;
 import com.bobomee.android.sharelogin.login.interfaces.ILogin;
 import com.bobomee.android.sharelogin.login.interfaces.ILoginCallback;
 import com.bobomee.android.sharelogin.login.model.QQInfoModel;
@@ -90,13 +90,19 @@ public class QQLogin implements ILogin {
     }
   }
 
-  @Override public void doLogin(Activity activity, ILoginCallback callback) {
+  @Override public void prepare(Activity activity) {
     //instance
-    String qqAppId = LoginBlock.getInstance().getQQAppId();
+    String qqAppId = LoginShareBlock.getInstance().getQQAppId();
 
     if (!TextUtils.isEmpty(qqAppId)) {
       mTencent = Tencent.createInstance(qqAppId, activity);
     }
+
+    this.activity = activity;
+  }
+
+  @Override public void doLogin(Activity activity, ILoginCallback callback) {
+    this.iLoginCallback = callback;
 
     if (null != mTencent) {
       //login
@@ -105,9 +111,6 @@ public class QQLogin implements ILogin {
       } else {
         mTencent.logout(activity);
       }
-
-      this.activity = activity;
-      this.iLoginCallback = callback;
     }
   }
 

@@ -21,7 +21,7 @@ package com.bobomee.android.sharelogin.wxapi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import com.bobomee.android.sharelogin.login.LoginBlock;
+import com.bobomee.android.sharelogin.login.LoginShareBlock;
 import com.bobomee.android.sharelogin.login.WechatApiService;
 import com.bobomee.android.sharelogin.login.interfaces.ILoginCallback;
 import com.bobomee.android.sharelogin.login.manager.WeiXinLogin;
@@ -30,6 +30,7 @@ import com.bobomee.android.sharelogin.login.model.WeixinTokenModel;
 import com.bobomee.android.sharelogin.login.util.ThreadManager;
 import com.bobomee.android.sharelogin.share.impl.WechatShare;
 import com.bobomee.android.sharelogin.share.interfaces.IShareCallBack;
+import com.bobomee.android.sharelogin.util.WxLSUtil;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
@@ -58,7 +59,7 @@ public class WXAuthHandlerActivity extends AppCompatActivity implements IWXAPIEv
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     // 注册微信
-    api = WeiXinLogin.getApi();
+    api = WxLSUtil.getmIWXAPI();
 
     sILoginCallback = WeiXinLogin.getiLoginCallback();
     sIShareCallBack = WechatShare.getmIShareCallBack();
@@ -90,8 +91,8 @@ public class WXAuthHandlerActivity extends AppCompatActivity implements IWXAPIEv
             ThreadManager.getShortPool().execute(new Runnable() {
               @Override public void run() {
                 WeixinTokenModel accessToken =
-                    WechatApiService.getAccessToken(LoginBlock.getInstance().getWechatAppId(),
-                        LoginBlock.getInstance().getWechatAppSecret(), code);
+                    WechatApiService.getAccessToken(LoginShareBlock.getInstance().getWechatAppId(),
+                        LoginShareBlock.getInstance().getWechatAppSecret(), code);
 
                 if (null != sILoginCallback) sILoginCallback.tokeCallBack(accessToken);
 

@@ -16,7 +16,7 @@ public class WxpayUtil {
 
     private static IWXAPI mIWXAPI;
 
-    public WxpayUtil(Context context) {
+    public static void init(Context context) {
         String wechatAppId = PayBlock.getInstance().getWechatAppId();
         if (!TextUtils.isEmpty(wechatAppId)) {
             mIWXAPI = WXAPIFactory.createWXAPI(context, wechatAppId);
@@ -56,5 +56,9 @@ public class WxpayUtil {
 
     public static IWXAPI getmIWXAPI() {
         return mIWXAPI;
+    }
+
+    public static void detach() {
+        mIWXAPI.detach();
     }
 }

@@ -3,9 +3,10 @@ package com.yaodu.drug;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-import com.bobomee.android.sharelogin.login.LoginBlock;
+import com.bobomee.android.sharelogin.login.LoginShareBlock;
 import com.bobomee.android.sharelogin.login.interfaces.ILoginCallback;
 import com.bobomee.android.sharelogin.login.manager.LoginManager;
 import com.bobomee.android.sharelogin.login.manager.QQLogin;
@@ -30,28 +31,33 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 public class MainActivity extends AppCompatActivity implements IWeiboHandler.Response {
 
-  private LoginManager mWeixinLogin;
-  private LoginManager mQqLogin;
-  private LoginManager mWbLogin;
   private QqShare mQqshare;
   private WbShare mMWbshare;
+
+  private LoginManager mLoginManager = LoginManager.INSTANCE;
+  private static final String TAG = "MainActivity";
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    /////////////////////////login///////////////////////
-    LoginBlock.getInstance().initWechatLogin("", "");
-    LoginBlock.getInstance().initQQLogin("");
-    LoginBlock.getInstance().initWbLogin("", "");
+    // TODO: init appid
+    LoginShareBlock.getInstance().initWechat("", "");
+    LoginShareBlock.getInstance().initQQ("");
+    LoginShareBlock.getInstance().initWb("", "");
   }
 
   /////////////////////////////////////
   public void wxlogin(View view) {
 
-    mWeixinLogin = new LoginManager(this, WeiXinLogin.class, new ILoginCallback() {
+    mLoginManager.loginClass(WeiXinLogin.class).loginCallback(new ILoginCallback() {
       @Override public void tokeCallBack(Object o) {
         final WeixinTokenModel tokenModel = (WeixinTokenModel) o;
+        runOnUiThread(new Runnable() {
+          @Override public void run() {
+            Toast.makeText(MainActivity.this, tokenModel.toString(), Toast.LENGTH_SHORT).show();
+          }
+        });
       }
 
       @Override public void infoCallBack(Object o) {
@@ -79,15 +85,16 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
           }
         });
       }
-    });
+    }).doLogin(this);
 
-    mWeixinLogin.doLogin();
   }
 
   public void qqlogin(View view) {
-    mQqLogin = new LoginManager(this, QQLogin.class, new ILoginCallback() {
+
+    mLoginManager.loginClass(QQLogin.class).loginCallback(new ILoginCallback() {
       @Override public void tokeCallBack(Object o) {
         QQTokenModel qqTokenModel = (QQTokenModel) o;
+        Log.d(TAG, "tokeCallBack: == " + qqTokenModel);
       }
 
       @Override public void infoCallBack(Object o) {
@@ -103,15 +110,16 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
       @Override public void onCancel() {
 
       }
-    });
+    }).doLogin(this);
 
-    mQqLogin.doLogin();
   }
 
   public void wblogin(View view) {
-    mWbLogin = new LoginManager(this, WeiboLogin.class, new ILoginCallback() {
+
+    mLoginManager.loginClass(WeiboLogin.class).loginCallback(new ILoginCallback() {
       @Override public void tokeCallBack(Object o) {
         Oauth2AccessToken mAccessToken = (Oauth2AccessToken) o;
+        Log.d(TAG, "tokeCallBack:  ---> " + mAccessToken);
       }
 
       @Override public void infoCallBack(Object o) {
@@ -127,18 +135,12 @@ public class MainActivity extends AppCompatActivity implements IWeiboHandler.Res
       @Override public void onCancel() {
 
       }
-    });
-    mWbLogin.doLogin();
+    }).doLogin(this);
+
   }
 
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (null != mQqLogin && mQqLogin.onActivityResult(requestCode, resultCode, data)) {
-
-    }
-    if (null != mWbLogin && mWbLogin.onActivityResult(requestCode, resultCode, data)) {
-
-    }
-    if (null != mWeixinLogin && mWeixinLogin.onActivityResult(requestCode, resultCode, data)) {
+    if (null != mLoginManager && mLoginManager.onActivityResult(requestCode, resultCode, data)) {
 
     }
 

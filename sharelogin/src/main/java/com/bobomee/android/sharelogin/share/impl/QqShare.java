@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import com.bobomee.android.sharelogin.login.LoginBlock;
+import com.bobomee.android.sharelogin.login.LoginShareBlock;
 import com.bobomee.android.sharelogin.share.content.ShareContent;
 import com.bobomee.android.sharelogin.share.interfaces.IShare;
 import com.bobomee.android.sharelogin.share.interfaces.IShareCallBack;
@@ -29,7 +29,7 @@ public class QqShare implements IShare {
   private IShareCallBack iShareCallBack;
 
   public QqShare(Activity activity) {
-    String qqAppId = LoginBlock.getInstance().getQQAppId();
+    String qqAppId = LoginShareBlock.getInstance().getQQAppId();
     if (!TextUtils.isEmpty(qqAppId)){
       this.mActivity = activity;
       mTencent = Tencent.createInstance(qqAppId, activity);

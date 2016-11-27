@@ -6,7 +6,7 @@ package com.bobomee.android.paylib;
  * @author bobomee.
  *         wbwjx115@gmail.com
  */
-public class PayBlock {
+public final class PayBlock {
 
   private static PayBlock mInstance;
 
@@ -25,11 +25,11 @@ public class PayBlock {
   /**
    * init  wechat pay params
    */
-  public void initWechatPay(String wechatAppId) {
+  public final void initWechatPay(String wechatAppId) {
     this.mWechatAppId = wechatAppId;
   }
 
-  public String getWechatAppId() {
+  public final String getWechatAppId() {
     return mWechatAppId;
   }
 }

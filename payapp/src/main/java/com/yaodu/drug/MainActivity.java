@@ -13,6 +13,7 @@ import com.bobomee.android.paylib.interfaces.WxpayResultListener;
 import com.bobomee.android.paylib.model.AliPayResult;
 import com.bobomee.android.paylib.model.AliPayResultS;
 import com.bobomee.android.paylib.util.AlipayUtil;
+import com.bobomee.android.paylib.util.ThreadManager;
 import com.bobomee.android.paylib.util.WxpayUtil;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.modelpay.PayResp;
@@ -28,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.content_main);
 
         /////////////////////////pay//////////////////////////
-        //todo init
-        PayBlock.getInstance().initWechatPay("");
-        AlipayBlock.getInstance().initAliPay("", "", "");
+      //todo init appid
+      PayBlock.getInstance().initWechatPay("wxb4ba3c02aa476ea1");
+      WxpayUtil.init(this);
+      //todo mock data,will be set in server,
+      AlipayBlock.getInstance().initAliPay("", "", "");
 
     }
 
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else {
 
-            // TODO: inin orderindo
+          // todo Using mock data to generate payinfo
             String orderInfo = AlipayOrderInfo.getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
             String sign = AlipayOrderInfo.sign(orderInfo);
 
@@ -113,35 +116,48 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else {
 
-            // TODO: inin orderindo
-            String payInfo = "";
-            PayReq req = WechatOderInfo.getWeixinPayReq(payInfo);
+          // todo Using mock data to generate payinfo
+          final String[] payInfo = { "" };
 
-                WxpayUtil.weixinPay(req, new WxpayResultListener() {
-                    @Override public void payResult(PayResp payResp) {
-                        String prepayId = payResp.prepayId;
-                        Toast.makeText(MainActivity.this, "prepayid--->" + prepayId,
-                            Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override public void onError(int errCode) {
-                        Toast.makeText(MainActivity.this, "onError()-->" + errCode,
-                            Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override public void onCancel() {
-                        Toast.makeText(MainActivity.this, "onCancel()", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override public void notSupport() {
-                        Toast.makeText(MainActivity.this, "没有安装微信,或版本太低", Toast.LENGTH_SHORT)
-                            .show();
-                    }
-                });
+          ThreadManager.getShortPool().execute(new Runnable() {
+            @Override public void run() {
+              payInfo[0] = WechatOderInfo.getPayInfo();
+              pay(payInfo[0]);
+            }
+          });
         }
+    }
+
+  public void pay(String payInfo) {
+    PayReq req = WechatOderInfo.getWeixinPayReq(payInfo);
+
+    WxpayUtil.weixinPay(req, new WxpayResultListener() {
+      @Override public void payResult(PayResp payResp) {
+        String prepayId = payResp.prepayId;
+        Toast.makeText(MainActivity.this, "prepayid--->" + prepayId, Toast.LENGTH_SHORT).show();
+      }
+
+      @Override public void onError(int errCode) {
+        Toast.makeText(MainActivity.this, "onError()-->" + errCode, Toast.LENGTH_SHORT).show();
+      }
+
+      @Override public void onCancel() {
+        Toast.makeText(MainActivity.this, "onCancel()", Toast.LENGTH_SHORT).show();
+      }
+
+      @Override public void notSupport() {
+        Toast.makeText(MainActivity.this, "没有安装微信,或版本太低", Toast.LENGTH_SHORT).show();
+      }
+    });
     }
 
     ///////////////////////////////////////////////
 
-
+  /**
+   * Free memory to prevent memory leaks.
+   */
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    WxpayUtil.detach();
+  }
 }

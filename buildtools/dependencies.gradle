@@ -1,0 +1,25 @@
+ext {
+
+
+  //singning
+//  storeFile = file('')
+//  storePassword = ''
+//  keyAlias = ''
+//  keyPassword = ''
+
+}
+
+afterEvaluate {
+  tasks.matching {
+    it.name.startsWith('dex')
+  }.each { dx ->
+    if (dx.additionalParameters == null) {
+      dx.additionalParameters = []
+    }
+    dx.additionalParameters += '--multi-dex' // enable multidex
+
+    // optional
+    dx.additionalParameters += "--main-dex-list=$projectDir/<filename>".toString()
+    // enable the main-dex-list
+  }
+}
